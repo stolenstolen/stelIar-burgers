@@ -9,7 +9,7 @@ import type { TOrder } from '@utils-types';
 
 export const ProfileOrders = (): React.JSX.Element => {
   const dispatch = useDispatch();
-  const orders: TOrder[] = useSelector(selectFeedState).orders;
+  const orders: TOrder[] = useSelector(selectFeedState).userOrders;
 
   useEffect(() => {
     void dispatch(fetchProfileOrders());

@@ -211,9 +211,14 @@ const ProtectedRoute = ({
 };
 
 const AuthRoute = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
+  const location = useLocation();
   const { user, isAuthChecked } = useSelector(selectUserState);
   if (!isAuthChecked) return <Preloader />;
-  if (user) return <Navigate to="/" replace />;
+  if (user) {
+    const from =
+      (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? '/';
+    return <Navigate to={from} replace />;
+  }
   return <>{children}</>;
 };
 

@@ -8,7 +8,7 @@ import { updateUser } from '@services/userSlice';
 export const Profile = (): React.JSX.Element => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const updateUserError = useSelector(selectUserState).error ?? undefined;
+  const updateUserError = useSelector(selectUserState).updateUserError ?? undefined;
 
   const [formValue, setFormValue] = useState({
     name: user?.name ?? '',

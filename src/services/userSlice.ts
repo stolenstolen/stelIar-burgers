@@ -17,14 +17,18 @@ type TUserState = {
   user: TUser | null;
   isLoading: boolean;
   isAuthChecked: boolean;
-  error: string | null;
+  loginError: string | null;
+  registerError: string | null;
+  updateUserError: string | null;
 };
 
 const initialState: TUserState = {
   user: null,
   isLoading: false,
   isAuthChecked: false,
-  error: null,
+  loginError: null,
+  registerError: null,
+  updateUserError: null,
 };
 
 const saveTokens = (refreshToken: string, accessToken: string): void => {
@@ -117,7 +121,7 @@ const userSlice = createSlice({
       })
       .addCase(login.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        state.loginError = null;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -125,11 +129,11 @@ const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload ?? action.error.message ?? 'Не удалось войти';
+        state.loginError = action.payload ?? action.error.message ?? 'Не удалось войти';
       })
       .addCase(register.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        state.registerError = null;
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -137,14 +141,17 @@ const userSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
-        state.error =
+        state.registerError =
           action.payload ?? action.error.message ?? 'Не удалось зарегистрироваться';
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.updateUserError = null;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.user = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.error =
+        state.updateUserError =
           action.payload ?? action.error.message ?? 'Не удалось сохранить данные';
       })
       .addCase(logout.fulfilled, (state) => {

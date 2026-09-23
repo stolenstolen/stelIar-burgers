@@ -1,12 +1,16 @@
-import { getOrderByNumberApi } from '@api';
 import { Preloader, OrderInfoUI } from '@ui';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { selectFeedState, selectIngredients } from '@services/selectors';
-import { useSelector } from '@services/store';
+import { fetchOrderByNumber } from '@services/orderSlice';
+import {
+  selectFeedState,
+  selectIngredients,
+  selectOrderState,
+} from '@services/selectors';
+import { useDispatch, useSelector } from '@services/store';
 
-import type { TOrder, TIngredient } from '@utils-types';
+import type { TIngredient } from '@utils-types';
 
 export const OrderInfo = (): React.JSX.Element => {
   const { number } = useParams();
@@ -14,15 +18,15 @@ export const OrderInfo = (): React.JSX.Element => {
     (order) => order.number === Number(number)
   );
   const ingredients: TIngredient[] = useSelector(selectIngredients);
-  const [loadedOrder, setLoadedOrder] = useState<TOrder | null>(null);
+  const dispatch = useDispatch();
+  const { details, detailsLoading } = useSelector(selectOrderState);
 
   useEffect(() => {
     if (storedOrder || !number) return;
-    void getOrderByNumberApi(Number(number))
-      .then((response) => setLoadedOrder(response.orders[0] ?? null))
-      .catch(() => setLoadedOrder(null));
-  }, [number, storedOrder]);
+    void dispatch(fetchOrderByNumber(Number(number)));
+  }, [dispatch, number, storedOrder]);
 
+  const loadedOrder = details?.number === Number(number) ? details : null;
   const orderData = storedOrder ?? loadedOrder;
 
   /**
@@ -68,7 +72,7 @@ export const OrderInfo = (): React.JSX.Element => {
     };
   }, [orderData, ingredients]);
 
-  if (!orderInfo) {
+  if (detailsLoading || !orderInfo) {
     return <Preloader />;
   }
 

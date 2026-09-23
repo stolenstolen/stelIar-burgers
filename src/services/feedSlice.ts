@@ -5,6 +5,7 @@ import type { TOrder } from '@utils-types';
 
 type TFeedState = {
   orders: TOrder[];
+  userOrders: TOrder[];
   total: number;
   totalToday: number;
   isLoading: boolean;
@@ -13,6 +14,7 @@ type TFeedState = {
 
 const initialState: TFeedState = {
   orders: [],
+  userOrders: [],
   total: 0,
   totalToday: 0,
   isLoading: false,
@@ -75,7 +77,7 @@ const feedSlice = createSlice({
       })
       .addCase(fetchProfileOrders.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.orders = action.payload;
+        state.userOrders = action.payload;
       })
       .addCase(fetchProfileOrders.rejected, (state, action) => {
         state.isLoading = false;
