@@ -12,6 +12,7 @@ export const IngredientsCategory = ({
   titleRef,
   ingredients,
   ref,
+  ...rest
 }: TIngredientsCategoryProps): React.JSX.Element => {
   const burgerConstructor: TConstructorState = useSelector(selectBurgerConstructor);
 
@@ -33,6 +34,7 @@ export const IngredientsCategory = ({
       ingredients={ingredients}
       ingredientsCounters={ingredientsCounters}
       ref={ref}
+      {...rest}
     />
   );
 };
